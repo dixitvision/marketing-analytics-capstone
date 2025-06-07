@@ -1,9 +1,9 @@
 
-# DATA6000 Capstone Project – Digital Marketing Campaign Analysis
+# Capstone Project – Marketing Campaign Analytics
 
-### 📊 Student: Dixit Mukeshkumar Patel  
-**Student ID:** 1827575  
-**Course:** Master of Business Analytics – Kaplan Business School  
+### 📊 Created by: Dixit Mukeshkumar Patel  
+📍 Perth, WA, Australia  
+📧 dixitmpatel14@gmail.com  
 
 ---
 
@@ -12,10 +12,10 @@
 
 ---
 
-## 📁 Project Structure
+## 📂 Project Structure
 
 ```
-DATA6000-Capstone-Project/
+marketing-campaign-analytics/
 │
 ├── reports/
 │   └── Final_Report.docx
@@ -28,84 +28,86 @@ DATA6000-Capstone-Project/
 │   └── Final_Dashboard.pbix
 │
 ├── models_orange/
-│   └── KNN.ows
-│   └── Logistic.ows
-│   └── Neural_Networks.ows
-│   └── Random_Forest.ows
-│   └── SVM.ows
+│   └── KNN_Model.ows
+│   └── Logistic_Regression_Model.ows
+│   └── Neural_Network_Model.ows
+│   └── Random_Forest_Model.ows
+│   └── SVM_Model.ows
 │
 ├── dataset/
-│   └── digital_marketing_campaign_dataset.csv
+│   └── marketing_campaign_dataset.csv
 │
 └── README.md
 ```
 
 ---
 
-## 📌 Objective
+## 🎯 Objective
 
-This project aimed to analyse and improve a digital marketing campaign's effectiveness by:
+This project aims to analyse and improve the effectiveness of a digital marketing campaign by:
 - Identifying key features influencing customer response
-- Using machine learning models to predict campaign success
-- Creating visual dashboards for business decision-making
+- Applying machine learning models to predict campaign outcomes
+- Presenting visual insights through an interactive Power BI dashboard
 
 ---
 
-## 🛠️ Tools and Techniques
+## 🛠️ Tools and Technologies
 
-- **Power BI** for interactive visualisation
-- **Orange ML** for machine learning (KNN, Logistic Regression, SVM, Neural Networks, Random Forest)
-- **Excel & CSV** for data cleaning
-- **Business Report Writing** and presentation
-
----
-
-## 📈 Machine Learning Models
-
-Models were created using Orange to predict campaign response:
-- ✅ KNN
-- ✅ Logistic Regression
-- ✅ SVM
-- ✅ Neural Networks
-- ✅ Random Forest
-
-Performance of models was evaluated using Accuracy, AUC, and Confusion Matrix.
+- **Power BI** – for interactive dashboard creation
+- **Orange ML** – for machine learning modelling (KNN, Logistic Regression, SVM, Neural Networks, Random Forest)
+- **Excel/CSV** – for data preprocessing and manipulation
+- **MS Word/PowerPoint** – for report writing and presentation
 
 ---
 
-## 📊 Power BI Dashboard
+## 🤖 Machine Learning Models
 
-Interactive visuals include:
-- Customer demographics
-- Campaign success rates
-- Product preferences
+The following models were developed and tested using Orange ML:
+- K-Nearest Neighbour (KNN)
+- Logistic Regression
+- Support Vector Machine (SVM)
+- Neural Network
+- Random Forest
 
----
-
-## 📄 Files Summary
-
-| Folder         | Contents |
-|----------------|----------|
-| `reports/`     | Final report and feedback documents |
-| `presentation/`| Capstone presentation slides |
-| `powerbi/`     | Power BI dashboard file |
-| `models_orange/`| Machine learning workflows (Orange) |
-| `dataset/`     | CSV dataset used for analysis |
+All models were evaluated based on accuracy, AUC, and confusion matrix.
 
 ---
 
-## 🙌 Acknowledgements
+## 📊 Dashboard Highlights
 
-Special thanks to my mentor and Kaplan faculty for their guidance during this capstone.
+Power BI dashboard includes:
+- Customer demographics overview
+- Campaign success rate visualisations
+- Product and service response insights
 
 ---
 
-## 📬 Contact
+## 📁 File Summary
+
+| Folder           | Description                                 |
+|------------------|---------------------------------------------|
+| `reports/`       | Contains the final project report and feedback documents |
+| `presentation/`  | Final presentation slides in PowerPoint format |
+| `powerbi/`       | Power BI `.pbix` file for interactive analytics |
+| `models_orange/` | Orange ML model workflows in `.ows` format |
+| `dataset/`       | The main dataset used in `.csv` format |
+
+---
+
+## 🙏 Acknowledgements
+
+Special thanks to my mentors and reviewers who guided me during the completion of this project.
+
+---
+
+## 🔗 Contact
+
+Feel free to connect with me for collaboration or feedback:
 
 **Dixit Mukeshkumar Patel**  
-📧 [Your Email]  
-📍 Perth, WA, Australia
+📧 dixitmpatel14@gmail.com  
+🌍 Perth, WA, Australia
 
 ---
 
-> *This project is part of the Master of Business Analytics Capstone at Kaplan Business School.*
+> *This project is part of my personal portfolio and demonstrates my skills in analytics, visualisation, and predictive modelling.*
