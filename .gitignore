@@ -404,3 +404,13 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+# Python build artifacts
+*.egg-info/
+dist/
+build/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+*.egg
