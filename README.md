@@ -1,261 +1,330 @@
-# 📣 Marketing Campaign Analytics — Capstone Project
+# 🤖 AI Agent Company
 
-> **Improving Marketing Campaign Strategy using Business Analytics and Machine Learning**
+> **A multi-agent framework for business automation powered by AI**
 
 **Author:** Dixit Mukeshkumar Patel &nbsp;|&nbsp; 📍 Perth, WA, Australia &nbsp;|&nbsp; 📧 dixitmpatel14@gmail.com
 
-![Python](https://img.shields.io/badge/Tool-Orange%20ML-orange?logo=data:image/png;base64,&logoColor=white)
-![Power BI](https://img.shields.io/badge/Tool-Power%20BI-F2C811?logo=powerbi&logoColor=black)
-![Dataset](https://img.shields.io/badge/Dataset-8%2C000%20Records-blue)
-![Models](https://img.shields.io/badge/Models-5%20Algorithms-green)
-![Status](https://img.shields.io/badge/Status-Complete-brightgreen)
+![Python](https://img.shields.io/badge/Python-3.11%2B-blue?logo=python&logoColor=white)
+![License](https://img.shields.io/badge/License-MIT-green)
+![Tests](https://img.shields.io/badge/Tests-Passing-brightgreen)
+![Status](https://img.shields.io/badge/Status-Active-brightgreen)
 
 ---
 
-## 🎯 Project Overview
+## 🎯 Overview
 
-This capstone project analyses a **digital marketing campaign dataset** of 8,000 customer records to predict whether a customer will convert, and to identify which campaign factors drive the best outcomes. The project combines **machine learning classification models** (built in Orange ML), **interactive dashboards** (Power BI), and formal written analysis (Word / PowerPoint).
+**AI Agent Company** is a Python framework that provides a team of specialised AI agents for common business functions — sales, marketing, and customer support. Each agent is powered by a language model of your choice (or runs in mock mode for development and testing) and is orchestrated by a central **Company** class that routes tasks to the right agent automatically.
 
-**Core questions answered:**
-- Which customer and campaign attributes most strongly predict conversion?
-- Which machine learning model performs best at predicting conversion?
-- How can marketing spend and channel targeting be improved based on the data?
+```
+                  ┌─────────────────────────┐
+                  │         Company         │
+                  │   (task orchestrator)   │
+                  └──────────┬──────────────┘
+            ┌────────────────┼────────────────┐
+            ▼                ▼                ▼
+     ┌─────────────┐  ┌──────────────┐  ┌──────────────────┐
+     │ SalesAgent  │  │MarketingAgent│  │CustomerSupportAgt│
+     └─────────────┘  └──────────────┘  └──────────────────┘
+```
 
 ---
 
 ## 📂 Repository Structure
 
 ```
-marketing-analytics-capstone/
+ai-agent-company/
 │
-├── Dataset/
-│   └── digital_marketing_campaign_dataset.csv   ← 8,000 rows, 20 columns
+├── src/
+│   └── ai_agent_company/
+│       ├── __init__.py
+│       ├── company.py              ← Orchestrator / Company class
+│       ├── config.py               ← Runtime configuration
+│       ├── agents/
+│       │   ├── __init__.py
+│       │   ├── base.py             ← Abstract BaseAgent, Task, TaskResult
+│       │   ├── sales.py            ← SalesAgent
+│       │   ├── marketing.py        ← MarketingAgent
+│       │   └── support.py          ← CustomerSupportAgent
+│       └── utils/
+│           ├── __init__.py
+│           ├── logging.py          ← Logging helpers
+│           └── formatting.py       ← Output formatting helpers
 │
-├── Models_Orange/
-│   ├── KNN_Model.ows                             ← 5 KNN variants (k = 3, 5, 7, 10, 15)
-│   ├── Logistic_Regression_Model.ows             ← L1, L2 and no-penalty variants
-│   ├── Neural_Networks_Model.ows                 ← 5 MLP architectures
-│   ├── Random_Forest_Model.ows                   ← 5 RF configurations (200–2000 trees)
-│   ├── SVM_Model.ows                             ← Linear, Polynomial, RBF, Sigmoid kernels
-│   └── Final_Model_Workflow.ows                  ← Best models combined for final comparison
+├── tests/
+│   ├── __init__.py
+│   ├── test_base_agent.py
+│   ├── test_agents.py
+│   ├── test_company.py
+│   └── test_utils.py
 │
-├── PowerBI/
-│   ├── Marketing_Dashboard_V1.pbix
-│   └── Marketing_Dashboard_V2.pbix               ← Interactive campaign performance dashboard
-│
-├── Reports/
-│   ├── Project_Report.docx
-│   ├── Final_Project_Report.docx                 ← Final submitted report
-│   └── Feedback_Report.docx
-│
-├── Presentation/
-│   ├── Final_Presentation_V1.pptx
-│   └── Final_Presentation_V2.pptx               ← Final submitted slides
-│
+├── .github/workflows/ci.yml        ← GitHub Actions CI pipeline
+├── pyproject.toml
+├── requirements-dev.txt
 └── README.md
 ```
 
 ---
 
-## 📊 Dataset
+## 🚀 Quick Start
 
-**File:** `Dataset/digital_marketing_campaign_dataset.csv`
+### 1 · Install
 
-| Property | Value |
-|---|---|
-| Total records | 8,000 customers |
-| Total columns | 20 (17 features + CustomerID + 2 confidential + 1 target) |
-| Target variable | `Conversion` (binary: 1 = converted, 0 = not converted) |
-| Converted customers | 7,012 (87.6%) |
-| Not converted | 988 (12.3%) |
+```bash
+# Install the package from source
+pip install -e .
 
-### Column Reference
+# Install dev dependencies (tests + linter)
+pip install -r requirements-dev.txt
+```
 
-| Column | Type | Range / Values | Description |
-|---|---|---|---|
-| `CustomerID` | ID | 8000 – 15999 | Unique customer identifier (excluded from modelling) |
-| `Age` | Numeric | 18 – 69 (avg 43.6) | Customer age in years |
-| `Gender` | Categorical | Female (60.5%), Male (39.5%) | Customer gender |
-| `Income` | Numeric | $20,014 – $149,986 (avg $84,664) | Annual income in USD |
-| `CampaignChannel` | Categorical | Email, PPC, Referral, SEO, Social Media | Marketing channel used |
-| `CampaignType` | Categorical | Awareness, Consideration, Conversion, Retention | Campaign goal type |
-| `AdSpend` | Numeric | $100 – $9,998 (avg $5,001) | Advertising spend per customer in USD |
-| `ClickThroughRate` | Numeric | 0.01 – 0.30 (avg 0.15) | Ad click-through rate |
-| `ConversionRate` | Numeric | 0.01 – 0.20 (avg 0.10) | Historical conversion rate |
-| `WebsiteVisits` | Numeric | 0 – 49 (avg 24.8) | Number of website visits |
-| `PagesPerVisit` | Numeric | 1.0 – 10.0 (avg 5.6) | Average pages viewed per visit |
-| `TimeOnSite` | Numeric | 0.5 – 15.0 min (avg 7.7) | Average time on site in minutes |
-| `SocialShares` | Numeric | 0 – 99 (avg 49.8) | Number of social media shares |
-| `EmailOpens` | Numeric | 0 – 19 (avg 9.5) | Email opens count |
-| `EmailClicks` | Numeric | 0 – 9 (avg 4.5) | Email click count |
-| `PreviousPurchases` | Numeric | 0 – 9 (avg 4.5) | Number of previous purchases |
-| `LoyaltyPoints` | Numeric | 0 – 4,999 (avg 2,490) | Accumulated loyalty points |
-| `AdvertisingPlatform` | Categorical | Confidential | Platform used (redacted in this dataset) |
-| `AdvertisingTool` | Categorical | Confidential | Tool used (redacted in this dataset) |
-| `Conversion` | **Target** | 0 or 1 | **Whether the customer converted** |
+### 2 · Run in mock mode (no API key required)
 
-### Campaign Channel Distribution
+```python
+from ai_agent_company import Company
+from ai_agent_company.agents.base import AgentRole
 
-| Channel | Count | Share |
+company = Company(name="Acme AI")
+
+# Sales task
+result = company.run_task(
+    description="Qualify lead: TechStartup Ltd, budget $20k, needs CRM",
+    role=AgentRole.SALES,
+)
+print(result.output)
+
+# Marketing task
+result = company.run_task(
+    description="Create a campaign for our new product launch",
+    role=AgentRole.MARKETING,
+    context={"product": "CloudWidget Pro", "budget": 15000},
+)
+print(result.output)
+
+# Customer support task
+result = company.run_task(
+    description="Respond to a customer who cannot reset their password",
+    role=AgentRole.CUSTOMER_SUPPORT,
+)
+print(result.output)
+
+# Company-wide summary
+print(company.summary())
+```
+
+### 3 · Connect to a real LLM
+
+Pass any callable that accepts a prompt string and returns a response string:
+
+```python
+from openai import OpenAI
+
+client = OpenAI()  # reads OPENAI_API_KEY from environment
+
+def llm(prompt: str) -> str:
+    response = client.chat.completions.create(
+        model="gpt-4o",
+        messages=[{"role": "user", "content": prompt}],
+    )
+    return response.choices[0].message.content
+
+company = Company(name="My AI Company", llm_client=llm)
+```
+
+---
+
+## 🤖 Agents
+
+### SalesAgent
+
+Handles lead qualification, proposal drafting, and follow-up scheduling.
+
+```python
+from ai_agent_company.agents.sales import SalesAgent
+
+agent = SalesAgent()
+
+# Qualify a lead
+result = agent.qualify_lead(
+    lead_name="Globex Corp",
+    budget=50_000.0,
+    needs="Enterprise CRM with AI features",
+)
+
+# Draft a proposal
+result = agent.draft_proposal(
+    client_name="Globex Corp",
+    product="AI CRM Suite",
+    price=45_000.0,
+)
+```
+
+### MarketingAgent
+
+Handles campaign planning, content generation, and performance analysis.
+
+```python
+from ai_agent_company.agents.marketing import MarketingAgent
+
+agent = MarketingAgent()
+
+# Plan a campaign
+result = agent.create_campaign(
+    product="SaaS Analytics Tool",
+    target_audience="Data teams at mid-sized companies",
+    budget=25_000.0,
+    channels=["LinkedIn", "email", "SEO"],
+)
+
+# Generate content
+result = agent.generate_content(
+    topic="How AI is transforming customer analytics",
+    format="blog post",
+    tone="thought leadership",
+)
+
+# Analyse campaign performance
+result = agent.analyse_campaign(
+    campaign_name="Q2 Product Launch",
+    impressions=50_000,
+    clicks=2_500,
+    conversions=125,
+    spend=8_000.0,
+)
+```
+
+### CustomerSupportAgent
+
+Handles ticket triage, issue resolution, and post-resolution follow-up.
+
+```python
+from ai_agent_company.agents.support import CustomerSupportAgent
+
+agent = CustomerSupportAgent()
+
+# Triage a ticket
+result = agent.triage_ticket(
+    customer_name="Jane Doe",
+    issue="Cannot access dashboard after password reset",
+    priority="high",
+)
+
+# Generate a resolution
+result = agent.resolve_issue(
+    ticket_id="TKT-4521",
+    issue_summary="Dashboard access blocked after password reset",
+    product="Analytics Platform",
+)
+
+# Draft a follow-up message
+result = agent.draft_followup(
+    customer_name="Jane Doe",
+    resolved_issue="Dashboard access restored",
+    satisfaction_survey_url="https://example.com/survey",
+)
+```
+
+---
+
+## 🏢 Company Orchestrator
+
+The `Company` class creates a pre-configured team of agents and routes tasks to the right one:
+
+```python
+from ai_agent_company import Company
+from ai_agent_company.agents.base import AgentRole
+
+company = Company(name="Acme AI Corp")
+
+# Run a task (creates the Task internally)
+result = company.run_task(
+    description="Draft a proposal for Contoso Inc",
+    role=AgentRole.SALES,
+    context={"budget": 30_000, "product": "Enterprise Suite"},
+)
+
+# Register a custom agent
+from ai_agent_company.agents.base import BaseAgent, Task, TaskResult
+
+class FinanceAgent(BaseAgent):
+    def __init__(self):
+        from ai_agent_company.agents.base import AgentRole
+        super().__init__(name="Finance Agent", role=AgentRole.GENERAL)
+
+    def execute(self, task: Task) -> TaskResult:
+        return TaskResult(
+            task_id=task.task_id,
+            agent_id=self.agent_id,
+            output="Finance analysis complete.",
+        )
+
+company.register_agent(FinanceAgent())
+
+# View the activity summary
+print(company.summary())
+```
+
+---
+
+## 🛠️ Configuration
+
+All defaults can be overridden with environment variables:
+
+| Variable | Default | Description |
 |---|---|---|
-| Referral | 1,719 | 21.5% |
-| PPC | 1,655 | 20.7% |
-| Email | 1,557 | 19.5% |
-| Social Media | 1,519 | 19.0% |
-| SEO | 1,550 | 19.4% |
+| `AIAGENT_COMPANY_NAME` | `"AI Agent Company"` | Display name |
+| `AIAGENT_LLM_MODEL` | `"gpt-4o"` | Model identifier |
+| `AIAGENT_LLM_TEMPERATURE` | `"0.7"` | Sampling temperature |
+| `AIAGENT_LOG_LEVEL` | `"INFO"` | Logging verbosity |
 
-### Campaign Type Distribution
+```python
+from ai_agent_company.config import Config
 
-| Type | Count | Share |
-|---|---|---|
-| Conversion | 2,077 | 26.0% |
-| Awareness | 1,988 | 24.9% |
-| Consideration | 1,988 | 24.9% |
-| Retention | 1,947 | 24.4% |
+config = Config.from_env()
+print(config.company_name)
+```
 
 ---
 
-## 🛠️ Tools & Technologies
+## 🧪 Testing
 
-| Tool | Purpose |
-|---|---|
-| **Orange ML** | Visual machine learning — model building, hyperparameter tuning, evaluation |
-| **Power BI** | Interactive dashboard — campaign KPIs, customer segmentation, channel analysis |
-| **CSV / Excel** | Data storage and preprocessing |
-| **MS Word** | Project report and documentation |
-| **MS PowerPoint** | Final presentation slides |
+```bash
+# Run all tests
+pytest
 
----
+# Run with coverage
+pytest --cov=ai_agent_company --cov-report=term-missing
 
-## 🤖 Machine Learning Models
-
-All models were built in Orange ML with an **80/20 train/test split** (stratified) and evaluated using **Accuracy, AUC, and Confusion Matrix**. Preprocessing applied to all workflows: **standardisation (z-score)** and **one-hot encoding** of categorical variables.
-
-### 1 · K-Nearest Neighbours (`KNN_Model.ows`)
-
-Five configurations tested to compare the effect of k, distance metric, and weighting:
-
-| Variant | k | Distance Metric | Weighting |
-|---|---|---|---|
-| kNN 1 | 5 | Euclidean | Uniform |
-| kNN 2 | 3 | Euclidean | Distance |
-| kNN 3 | 7 | Manhattan | Uniform |
-| kNN 4 | 10 | Euclidean | Distance |
-| kNN 5 | 15 | Manhattan | Uniform |
+# Lint
+ruff check src/ tests/
+```
 
 ---
 
-### 2 · Logistic Regression (`Logistic_Regression_Model.ows`)
+## 📦 Extending with a New Agent
 
-Three regularisation strategies compared:
+1. Create a new file in `src/ai_agent_company/agents/`.
+2. Inherit from `BaseAgent` and implement the `execute` method.
+3. Add a new value to `AgentRole` if needed.
+4. Register the agent with `Company.register_agent()` or in `Company._register_default_agents()`.
 
-| Variant | Penalty | Regularisation Strength (C) |
-|---|---|---|
-| Lasso 1 | L1 (Lasso) | 100.0 (low regularisation) |
-| Ridge L2 | L2 (Ridge) | 100.0 (low regularisation) |
-| None | No penalty | — |
+```python
+from ai_agent_company.agents.base import AgentRole, BaseAgent, Task, TaskResult
 
-Coefficient tables exported for each variant to inspect feature importance.
+class HRAgent(BaseAgent):
+    def __init__(self, llm_client=None):
+        super().__init__(name="HR Agent", role=AgentRole.GENERAL, llm_client=llm_client)
 
----
-
-### 3 · Neural Networks (`Neural_Networks_Model.ows`)
-
-Five multi-layer perceptron architectures tested:
-
-| Variant | Hidden Layers | Activation | Solver | Max Iterations |
-|---|---|---|---|---|
-| NN1 | (10,) | ReLU | Adam | 200 |
-| NN2 | (25, 10) | ReLU | Adam | 500 |
-| NN3 | (25, 10, 5) | ReLU | SGD | 500 |
-| NN4 | (50, 25, 10) | tanh | Adam | 1,000 |
-| NN5 | (25, 10) | Logistic | SGD | 500 |
+    def execute(self, task: Task) -> TaskResult:
+        prompt = f"You are an HR specialist. Task: {task.description}"
+        response = self._call_llm(prompt)
+        return TaskResult(task_id=task.task_id, agent_id=self.agent_id, output=response)
+```
 
 ---
 
-### 4 · Random Forest (`Random_Forest_Model.ows`)
+## 📄 License
 
-Five configurations covering a range of tree depths and ensemble sizes:
-
-| Variant | Trees | Max Depth | Min Samples Split | Max Features |
-|---|---|---|---|---|
-| RF1 | 200 | Unlimited | 5 | Auto |
-| RF2 | 500 | 10 | 5 | Auto |
-| RF3 | 300 | 15 | 5 | 12 |
-| RF4 | 500 | Unlimited | 10 | Auto |
-| RF5 | 2,000 | 20 | 10 | 24 |
-
----
-
-### 5 · Support Vector Machine (`SVM_Model.ows`)
-
-Four kernel types compared, all with C = 20.0:
-
-| Variant | Kernel | C |
-|---|---|---|
-| SVM | Sigmoid | 20.0 |
-| SVM (1) | RBF | 20.0 |
-| SVM (2) | Polynomial (degree 3) | 20.0 |
-| SVM (3) | Linear | 20.0 |
-
----
-
-### 6 · Final Comparison Workflow (`Final_Model_Workflow.ows`)
-
-The best-performing variant from each algorithm was brought together in a single workflow for side-by-side comparison, with added explainability components:
-
-| Component | Purpose |
-|---|---|
-| kNN 4 (k=10, Euclidean, Distance) | Best KNN variant |
-| Logistic Regression (no penalty) | Best LR variant |
-| NN3 (25-10-5, ReLU, SGD) | Best NN variant |
-| RF5 (2000 trees, depth 20) | Best RF variant |
-| SVM (RBF kernel) | Best SVM variant |
-| Feature Statistics | Dataset summary and distributions |
-| Feature Importance | RF-based feature ranking |
-| Explain Model (SHAP) | Global model explanation |
-| Explain Prediction (SHAP) | Per-prediction explanation |
-| ICE Plots | Individual conditional expectation curves |
-
----
-
-## 📊 Power BI Dashboard
-
-**Files:** `PowerBI/Marketing_Dashboard_V1.pbix` · `PowerBI/Marketing_Dashboard_V2.pbix`
-
-The interactive dashboard covers:
-- **Campaign performance overview** — conversion rates by channel, type, and spend
-- **Customer demographics** — age groups, gender split, income bands
-- **Engagement metrics** — click-through rates, website visits, time on site, email engagement
-- **Loyalty analysis** — loyalty points distribution vs. conversion outcome
-- **Comparative KPIs** — side-by-side channel and campaign type effectiveness
-
----
-
-## 📁 File Summary
-
-| Folder | File(s) | Description |
-|---|---|---|
-| `Dataset/` | `digital_marketing_campaign_dataset.csv` | Full dataset — 8,000 records, 20 columns |
-| `Models_Orange/` | `KNN_Model.ows` | KNN workflow with 5 variants |
-| `Models_Orange/` | `Logistic_Regression_Model.ows` | Logistic Regression workflow with L1, L2, no-penalty |
-| `Models_Orange/` | `Neural_Networks_Model.ows` | Neural Network workflow with 5 architectures |
-| `Models_Orange/` | `Random_Forest_Model.ows` | Random Forest workflow with 5 configurations |
-| `Models_Orange/` | `SVM_Model.ows` | SVM workflow with 4 kernel types |
-| `Models_Orange/` | `Final_Model_Workflow.ows` | Combined best-model comparison + explainability |
-| `PowerBI/` | `Marketing_Dashboard_V1.pbix` | Power BI dashboard version 1 |
-| `PowerBI/` | `Marketing_Dashboard_V2.pbix` | Power BI dashboard version 2 (final) |
-| `Reports/` | `Project_Report.docx` | Initial project report |
-| `Reports/` | `Final_Project_Report.docx` | Final submitted project report |
-| `Reports/` | `Feedback_Report.docx` | Supervisor / reviewer feedback |
-| `Presentation/` | `Final_Presentation_V1.pptx` | Presentation version 1 |
-| `Presentation/` | `Final_Presentation_V2.pptx` | Final submitted presentation |
-
----
-
-## 🙏 Acknowledgements
-
-Special thanks to my mentors and reviewers who guided me throughout this project.
+[MIT License](LICENSE) — © 2025 Dixit Mukeshkumar Patel
 
 ---
 
@@ -267,4 +336,4 @@ Special thanks to my mentors and reviewers who guided me throughout this project
 
 ---
 
-> *This project is part of my personal portfolio and demonstrates skills in data analytics, machine learning, business intelligence, and data-driven decision making.*
+> *This project demonstrates skills in AI systems design, multi-agent architectures, Python software engineering, and test-driven development.*
