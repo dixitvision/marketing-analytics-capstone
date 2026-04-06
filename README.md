@@ -23,6 +23,18 @@ This capstone project analyses a **digital marketing campaign dataset** of 8,000
 
 ---
 
+## 🏗️ GitHub Repository
+
+Create the public GitHub repository for this project with the GitHub CLI:
+
+```bash
+gh repo create dixitvision/ai-agent-company --public --description "AI Agent Company"
+```
+
+Ensure you are authenticated with `gh` before running the command.
+
+---
+
 ## 📂 Repository Structure
 
 ```
